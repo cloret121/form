@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#050510">
+<title>Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--accent:#00f5d4;--accent-glow:rgba(0,245,212,0.25);--purple:#7b2ff7;--glass-bg:rgba(255,255,255,0.06);--glass-border:rgba(255,255,255,0.1);--text-primary:rgba(255,255,255,0.95);--text-secondary:rgba(255,255,255,0.45)}
+html{background:#050510;height:100%;overflow-y:scroll;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+body{min-height:100%;font-family:'Figtree',sans-serif;background:#050510;overflow-x:hidden}
+.bg{position:fixed;inset:0;background:#050510;overflow:hidden;z-index:0}
+.bg::before{content:'';position:absolute;inset:-50%;background:radial-gradient(ellipse 80% 60% at 20% 30%,rgba(88,28,220,0.55) 0%,transparent 60%),radial-gradient(ellipse 60% 80% at 80% 70%,rgba(15,10,80,0.8) 0%,transparent 60%),radial-gradient(ellipse 50% 50% at 50% 90%,rgba(0,200,180,0.2) 0%,transparent 60%),radial-gradient(ellipse 70% 40% at 90% 10%,rgba(120,40,200,0.4) 0%,transparent 50%);animation:meshShift 14s ease-in-out infinite alternate}
+.bg::after{content:'';position:absolute;inset:-50%;background:radial-gradient(ellipse 40% 60% at 60% 20%,rgba(0,245,212,0.12) 0%,transparent 55%),radial-gradient(ellipse 60% 40% at 10% 80%,rgba(60,10,140,0.5) 0%,transparent 55%),radial-gradient(ellipse 30% 50% at 80% 50%,rgba(180,50,255,0.15) 0%,transparent 50%);animation:meshShift2 18s ease-in-out infinite alternate}
+@keyframes meshShift{0%{transform:translate(0,0) rotate(0deg)}33%{transform:translate(3%,2%) rotate(2deg)}66%{transform:translate(-2%,4%) rotate(-1deg)}100%{transform:translate(2%,-3%) rotate(3deg)}}
+@keyframes meshShift2{0%{transform:translate(0,0) rotate(0deg)}50%{transform:translate(-4%,3%) rotate(-3deg)}100%{transform:translate(3%,-2%) rotate(2deg)}}
+.orb{position:fixed;border-radius:50%;filter:blur(65px);pointer-events:none;animation:orbFloat linear infinite;z-index:0}
+.orb-1{width:340px;height:340px;background:rgba(88,28,220,0.6);top:-100px;left:-80px;opacity:0.38;animation-duration:22s;animation-delay:-5s}
+.orb-2{width:260px;height:260px;background:rgba(0,200,180,0.45);bottom:-60px;right:-60px;opacity:0.32;animation-duration:18s;animation-delay:-9s}
+.orb-3{width:200px;height:200px;background:rgba(180,50,255,0.5);top:36%;right:4%;opacity:0.28;animation-duration:26s;animation-delay:-13s}
+@keyframes orbFloat{0%,100%{transform:translateY(0) scale(1)}25%{transform:translateY(-30px) scale(1.04)}50%{transform:translateY(-15px) scale(0.97)}75%{transform:translateY(-40px) scale(1.02)}}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:0.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.page{position:relative;z-index:2;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;padding-bottom:max(48px,env(safe-area-inset-bottom,48px));animation:pageIn 0.65s cubic-bezier(0.16,1,0.3,1) both}
+@keyframes pageIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;padding-top:max(18px,env(safe-area-inset-top,18px));background:rgba(5,5,16,0.65);border-bottom:1px solid var(--glass-border);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);position:sticky;top:0;z-index:10}
+.nav-left{display:flex;align-items:center;gap:12px}
+.avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--purple));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:0.85rem;color:#000;flex-shrink:0;box-shadow:0 0 16px var(--accent-glow)}
+.nav-name{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:var(--text-primary);letter-spacing:-0.01em}
+.nav-time{font-size:0.7rem;color:var(--text-secondary);margin-top:1px}
+.signout-link{background:rgba(255,255,255,0.06);border:1px solid var(--glass-border);border-radius:20px;padding:7px 16px;font-family:'Figtree',sans-serif;font-size:0.76rem;font-weight:600;color:var(--text-secondary);cursor:pointer;text-decoration:none;display:inline-block;transition:all 0.2s;-webkit-tap-highlight-color:transparent}
+.signout-link:hover{background:rgba(255,255,255,0.1);color:var(--text-primary)}
+.signout-link:active{opacity:0.7}
+.hero{display:flex;flex-direction:column;align-items:center;text-align:center;padding:56px 24px 44px}
+.status-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(0,245,212,0.08);border:1px solid rgba(0,245,212,0.22);border-radius:50px;padding:7px 18px;font-size:0.72rem;font-weight:700;color:var(--accent);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:26px;animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.15s both}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:blink 2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.45;transform:scale(0.75)}}
+@keyframes popIn{from{opacity:0;transform:scale(0.78)}to{opacity:1;transform:scale(1)}}
+.greeting{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.1rem,9vw,3.6rem);color:var(--text-primary);letter-spacing:-0.04em;line-height:1.08;margin-bottom:16px;animation:slideUp 0.65s cubic-bezier(0.16,1,0.3,1) 0.08s both}
+.greeting .hl{background:linear-gradient(135deg,var(--accent) 0%,#c084fc 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.hero-sub{font-size:clamp(0.88rem,3vw,1rem);color:var(--text-secondary);line-height:1.65;max-width:300px;margin:0 auto 36px;animation:slideUp 0.65s cubic-bezier(0.16,1,0.3,1) 0.18s both}
+.welcome-card{width:100%;max-width:440px;background:var(--glass-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--glass-border);border-radius:22px;padding:28px 24px;text-align:left;animation:slideUp 0.65s cubic-bezier(0.16,1,0.3,1) 0.28s both}
+.wc-head{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.wc-icon{width:46px;height:46px;border-radius:14px;flex-shrink:0;background:linear-gradient(135deg,var(--accent),var(--purple));display:flex;align-items:center;justify-content:center;font-size:1.3rem;box-shadow:0 6px 20px rgba(0,245,212,0.22)}
+.wc-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem;color:var(--text-primary);letter-spacing:-0.02em}
+.wc-sub{font-size:0.77rem;color:var(--text-secondary);margin-top:2px}
+.wc-divider{height:1px;background:var(--glass-border);margin-bottom:16px}
+.wc-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.wc-row:last-child{border-bottom:none;padding-bottom:0}
+.wc-ricon{width:34px;height:34px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.95rem}
+.c-teal{background:rgba(0,245,212,0.1)}.c-violet{background:rgba(123,47,247,0.15)}.c-pink{background:rgba(236,72,153,0.12)}
+.wc-rtext{flex:1}
+.wc-rtitle{font-size:0.84rem;font-weight:600;color:var(--text-primary)}
+.wc-rdesc{font-size:0.71rem;color:var(--text-secondary);margin-top:2px}
+.wc-arr{color:var(--text-secondary);font-size:0.85rem}
+.actions{padding:26px 24px 0;display:flex;flex-direction:column;align-items:center;gap:12px;animation:slideUp 0.65s cubic-bezier(0.16,1,0.3,1) 0.36s both}
+.btn-primary{width:100%;max-width:440px;padding:15px;background:linear-gradient(135deg,var(--accent),var(--purple));border:none;border-radius:16px;font-family:'Figtree',sans-serif;font-size:0.98rem;font-weight:700;color:#000;cursor:pointer;letter-spacing:0.02em;box-shadow:0 8px 32px rgba(0,245,212,0.2),0 4px 16px rgba(123,47,247,0.3);-webkit-tap-highlight-color:transparent;touch-action:manipulation;transition:opacity 0.15s,transform 0.15s}
+.btn-primary:active{opacity:0.82;transform:scale(0.985)}
+.signout-ghost{background:none;border:none;font-family:'Figtree',sans-serif;font-size:0.79rem;color:var(--text-secondary);cursor:pointer;-webkit-tap-highlight-color:transparent;padding:4px 8px;transition:color 0.2s;text-decoration:none;display:inline-block}
+.signout-ghost:hover{color:var(--text-primary)}
+@media(max-width:480px){.nav{padding:14px 16px}.hero{padding:38px 16px 30px}.welcome-card{border-radius:18px;padding:22px 16px}.actions{padding:22px 16px 0}}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="grain"></div>
+
+<div class="page">
+  <nav class="nav">
+    <div class="nav-left">
+      <div class="avatar" id="nav-avatar">?</div>
+      <div>
+        <div class="nav-name" id="nav-name">Hey</div>
+        <div class="nav-time" id="nav-time"></div>
+      </div>
+    </div>
+    <!-- Sign out anchor — you can update href to your login page path -->
+    <a class="signout-link" href="index.html" onclick="signOut()">Sign out</a>
+  </nav>
+
+  <div class="hero">
+    <div class="status-pill">
+      <div class="status-dot"></div>
+      <span id="pill-label">YOU'RE IN</span>
+    </div>
+    <h1 class="greeting">
+      <span id="greet-line">Good to see</span><br>
+      <span class="hl" id="greet-name">you again.</span>
+    </h1>
+    <p class="hero-sub" id="hero-sub">You're signed in. Everything is right where you left it.</p>
+
+    <div class="welcome-card">
+      <div class="wc-head">
+        <div class="wc-icon" id="wc-icon">👋</div>
+        <div>
+          <div class="wc-title" id="wc-title">Welcome back</div>
+          <div class="wc-sub" id="wc-sub">Signed in successfully</div>
+        </div>
+      </div>
+      <div class="wc-divider"></div>
+      <div class="wc-row">
+        <div class="wc-ricon c-teal">✨</div>
+        <div class="wc-rtext"><div class="wc-rtitle">Account active</div><div class="wc-rdesc">Your session is live and secure</div></div>
+        <div class="wc-arr">›</div>
+      </div>
+      <div class="wc-row">
+        <div class="wc-ricon c-violet">🔒</div>
+        <div class="wc-rtext"><div class="wc-rtitle">Safe &amp; secure</div><div class="wc-rdesc">Protected by encrypted session</div></div>
+        <div class="wc-arr">›</div>
+      </div>
+      <div class="wc-row">
+        <div class="wc-ricon c-pink">⚡</div>
+        <div class="wc-rtext"><div class="wc-rtitle">All systems go</div><div class="wc-rdesc">No issues detected</div></div>
+        <div class="wc-arr">›</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn-primary" onclick="alert('Your app content goes here! 🚀')">Explore →</button>
+    <!-- Second sign out anchor -->
+    <a class="signout-ghost" href="index.html" onclick="signOut()">Sign out and go back</a>
+  </div>
+</div>
+
+<script>
+const userName=sessionStorage.getItem('user_name');
+const isNew=sessionStorage.getItem('user_new')==='1';
+if(!userName){
+  window.location.href='index.html'; // ← REPLACE WITH YOUR PATH IF NEEDED
+}else{
+  const firstName=userName.split(' ')[0];
+  const initials=userName.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const hour=new Date().getHours();
+  const timeGreet=hour<12?'Good morning,':hour<18?'Good afternoon,':'Good evening,';
+  document.getElementById('nav-avatar').textContent=initials;
+  document.getElementById('nav-name').textContent=firstName;
+  document.getElementById('greet-name').textContent=firstName+(isNew?'!':'.');
+  document.title=`Hi, ${firstName}!`;
+  if(isNew){
+    document.getElementById('pill-label').textContent='ACCOUNT CREATED 🎉';
+    document.getElementById('greet-line').textContent='Welcome aboard,';
+    document.getElementById('hero-sub').textContent="You're all set! Your account is ready — let's get started.";
+    document.getElementById('wc-icon').textContent='🎉';
+    document.getElementById('wc-title').textContent='Account created!';
+    document.getElementById('wc-sub').textContent='Welcome to the community';
+  }else{
+    document.getElementById('greet-line').textContent=timeGreet;
+  }
+}
+function updateClock(){
+  const now=new Date();
+  const h=now.getHours()%12||12;
+  const m=String(now.getMinutes()).padStart(2,'0');
+  const ampm=now.getHours()>=12?'PM':'AM';
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  document.getElementById('nav-time').textContent=`${days[now.getDay()]} · ${h}:${m} ${ampm}`;
+}
+updateClock();
+setInterval(updateClock,10000);
+function signOut(){
+  sessionStorage.removeItem('user_name');
+  sessionStorage.removeItem('user_new');
+}
+</script>
+</body>
+</html>
