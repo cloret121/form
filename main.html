@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#050510">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root {
+  --accent: #00f5d4;
+  --accent-glow: rgba(0,245,212,0.2);
+  --purple: #7b2ff7;
+  --glass-bg: rgba(255,255,255,0.05);
+  --glass-border: rgba(255,255,255,0.09);
+  --text-primary: rgba(255,255,255,0.95);
+  --text-secondary: rgba(255,255,255,0.42);
+  --text-muted: rgba(255,255,255,0.25);
+}
+
+html { background:#050510; height:100%; overflow-x:hidden; -webkit-overflow-scrolling:touch; }
+body { min-height:100%; font-family:'Figtree',sans-serif; background:#050510; overflow-x:hidden; }
+
+/* ── BACKGROUND ── */
+.bg { position:fixed; inset:0; background:#050510; overflow:hidden; z-index:0; }
+.bg::before {
+  content:''; position:absolute; inset:-50%;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 30%, rgba(88,28,220,0.55) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 70%, rgba(15,10,80,0.8) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 50% 90%, rgba(0,200,180,0.2) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 40% at 90% 10%, rgba(120,40,200,0.4) 0%, transparent 50%);
+  animation:meshShift 14s ease-in-out infinite alternate;
+}
+.bg::after {
+  content:''; position:absolute; inset:-50%;
+  background:
+    radial-gradient(ellipse 40% 60% at 60% 20%, rgba(0,245,212,0.1) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 40% at 10% 80%, rgba(60,10,140,0.5) 0%, transparent 55%),
+    radial-gradient(ellipse 30% 50% at 80% 50%, rgba(180,50,255,0.12) 0%, transparent 50%);
+  animation:meshShift2 18s ease-in-out infinite alternate;
+}
+@keyframes meshShift {
+  0%  { transform:translate(0,0) rotate(0deg); }
+  33% { transform:translate(3%,2%) rotate(2deg); }
+  66% { transform:translate(-2%,4%) rotate(-1deg); }
+  100%{ transform:translate(2%,-3%) rotate(3deg); }
+}
+@keyframes meshShift2 {
+  0%  { transform:translate(0,0) rotate(0deg); }
+  50% { transform:translate(-4%,3%) rotate(-3deg); }
+  100%{ transform:translate(3%,-2%) rotate(2deg); }
+}
+.orb { position:fixed; border-radius:50%; filter:blur(80px); pointer-events:none; animation:orbFloat linear infinite; z-index:0; }
+.orb-1 { width:360px;height:360px;background:rgba(88,28,220,0.5);top:-120px;left:-100px;opacity:0.3;animation-duration:22s;animation-delay:-5s; }
+.orb-2 { width:280px;height:280px;background:rgba(0,200,180,0.4);bottom:-80px;right:-80px;opacity:0.25;animation-duration:18s;animation-delay:-9s; }
+.orb-3 { width:220px;height:220px;background:rgba(180,50,255,0.45);top:35%;right:3%;opacity:0.22;animation-duration:26s;animation-delay:-13s; }
+@keyframes orbFloat {
+  0%,100%{ transform:translateY(0) scale(1); }
+  25%    { transform:translateY(-30px) scale(1.04); }
+  50%    { transform:translateY(-14px) scale(0.97); }
+  75%    { transform:translateY(-40px) scale(1.02); }
+}
+.grain { position:fixed;inset:0;pointer-events:none;z-index:1;opacity:0.035;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+/* ── PAGE ── */
+.page {
+  position:relative; z-index:2;
+  min-height:100vh; min-height:100dvh;
+  display:flex; flex-direction:column;
+  overflow-y:auto; overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+}
+
+/* ── TOP NAV ── */
+.top-nav {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:16px 24px;
+  padding-top:max(16px, env(safe-area-inset-top, 16px));
+  background:rgba(5,5,16,0.7);
+  border-bottom:1px solid var(--glass-border);
+  backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
+  position:sticky; top:0; z-index:20;
+  animation:fadeDown 0.5s ease both;
+}
+@keyframes fadeDown { from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);} }
+
+.nav-logo {
+  font-family:'Syne',sans-serif; font-weight:800; font-size:1rem;
+  letter-spacing:-0.02em;
+  background:linear-gradient(135deg, var(--accent), #c084fc);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+.nav-right { display:flex; align-items:center; gap:10px; flex-shrink:0; }
+.nav-icon-btn {
+  width:36px; height:36px; border-radius:50%;
+  background:var(--glass-bg); border:1px solid var(--glass-border);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; color:var(--text-secondary);
+  transition:all 0.2s; -webkit-tap-highlight-color:transparent;
+}
+.nav-icon-btn:hover { background:rgba(255,255,255,0.08); color:var(--text-primary); }
+.nav-icon-btn svg { width:16px; height:16px; }
+
+/* ── SCROLL BODY ── */
+.body-scroll {
+  flex:1; overflow-y:auto; overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  padding:24px 20px max(80px, calc(env(safe-area-inset-bottom,0px) + 80px));
+  display:flex; flex-direction:column; gap:20px; max-width:480px; margin:0 auto; width:100%;
+}
+
+/* ── PROFILE CARD ── */
+.profile-card {
+  background:var(--glass-bg);
+  backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--glass-border);
+  border-radius:20px; padding:24px 20px;
+  display:flex; align-items:center; gap:16px;
+  animation:cardIn 0.6s cubic-bezier(0.16,1,0.3,1) 0.1s both;
+}
+@keyframes cardIn { from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);} }
+
+.profile-avatar {
+  width:56px; height:56px; border-radius:50%; flex-shrink:0;
+  background:linear-gradient(135deg, var(--accent), var(--purple));
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Syne',sans-serif; font-weight:800; font-size:1.1rem; color:#000;
+  box-shadow:0 0 20px var(--accent-glow);
+}
+.profile-info { flex:1; min-width:0; }
+.profile-name {
+  font-family:'Syne',sans-serif; font-weight:700; font-size:1.1rem;
+  color:var(--text-primary); letter-spacing:-0.02em;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.profile-status {
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:0.72rem; color:var(--accent); font-weight:600;
+  letter-spacing:0.04em; margin-top:3px;
+}
+.dot { width:6px; height:6px; border-radius:50%; background:var(--accent); box-shadow:0 0 6px var(--accent); animation:blink 2s ease-in-out infinite; }
+@keyframes blink { 0%,100%{opacity:1;}50%{opacity:0.4;} }
+.profile-time { font-size:0.7rem; color:var(--text-secondary); text-align:right; flex-shrink:0; line-height:1.5; }
+
+/* ── WELCOME SECTION ── */
+.welcome-section {
+  padding: 4px; border-radius:12px; background:var(--glass-bg); border:1px solid var(--glass-border); box-shadow:4px 4px 4px;
+  display:flex; flex-direction:column; gap:0;
+  animation:cardIn 0.6s cubic-bezier(0.16,1,0.3,1) 0.18s both;
+}
+.welcome-label {
+  font-size:0.68rem; font-weight:700; color:var(--accent);
+  letter-spacing:0.14em; text-transform:uppercase;
+  margin-bottom:8px;
+}
+.welcome-heading {
+  font-family:'Syne',sans-serif; font-weight:500;
+  font-size:1.5rem; color:var(--text-primary);
+  letter-spacing:-0.03em;
+  margin-bottom:14px;
+}
+.welcome-heading .hl {
+  background:linear-gradient(135deg, var(--accent), #c084fc);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  display:block;
+  line-height:2;
+}
+.welcome-msg {
+  font-size:0.85rem; color:var(--text-secondary);
+  line-height:1.6;
+}
+
+/* ── SECTION LABEL ── */
+.section-label {
+  font-size:0.7rem; font-weight:700; color:var(--text-muted);
+  letter-spacing:0.1em; text-transform:uppercase;
+  padding:0 2px;
+  animation:cardIn 0.6s cubic-bezier(0.16,1,0.3,1) 0.26s both;
+}
+
+/* ── CARDS GRID ── */
+.cards-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:12px;
+  animation:cardIn 0.6s cubic-bezier(0.16,1,0.3,1) 0.3s both;
+}
+.tile {
+  background:var(--glass-bg);
+  backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  border:1px solid var(--glass-border);
+  border-radius:16px; padding:18px 16px;
+  cursor:pointer; transition:border-color 0.2s, transform 0.15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.tile:hover { border-color:rgba(0,245,212,0.2); }
+.tile:active { transform:scale(0.97); }
+.tile-icon {
+  width:36px; height:36px; border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.05rem; margin-bottom:12px;
+}
+.ti-teal   { background:rgba(0,245,212,0.1); }
+.ti-purple { background:rgba(123,47,247,0.14); }
+.ti-pink   { background:rgba(236,72,153,0.1); }
+.ti-blue   { background:rgba(59,130,246,0.1); }
+.tile-title { font-family:'Syne',sans-serif; font-weight:700; font-size:0.84rem; color:var(--text-primary); letter-spacing:-0.01em; margin-bottom:4px; }
+.tile-desc  { font-size:0.69rem; color:var(--text-secondary); line-height:1.45; }
+
+/* ── WIDE CARD ── */
+.wide-card {
+  background:var(--glass-bg);
+  backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  border:1px solid var(--glass-border);
+  border-radius:16px; padding:18px 18px;
+  display:flex; align-items:center; gap:14px;
+  cursor:pointer; transition:border-color 0.2s;
+  -webkit-tap-highlight-color:transparent;
+  animation:cardIn 0.6s cubic-bezier(0.16,1,0.3,1) 0.38s both;
+}
+.wide-card:hover { border-color:rgba(0,245,212,0.2); }
+.wide-card:active { opacity:0.85; }
+.wide-icon { width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0; }
+.wide-text { flex:1; }
+.wide-title { font-family:'Syne',sans-serif; font-weight:700; font-size:0.88rem; color:var(--text-primary); letter-spacing:-0.01em; }
+.wide-desc  { font-size:0.72rem; color:var(--text-secondary); margin-top:2px; }
+.wide-arrow { color:var(--text-muted); font-size:1rem; }
+
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  position:fixed; bottom:0; left:50%; transform:translateX(-50%);
+  width:100%; max-width:480px;
+  background:rgba(5,5,16,0.85);
+  border-top:1px solid var(--glass-border);
+  backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
+  display:flex; align-items:center; justify-content:space-around;
+  padding:10px 8px max(10px, env(safe-area-inset-bottom, 10px));
+  z-index:20;
+}
+.nav-tab {
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  flex:1; padding:6px 0; cursor:pointer;
+  color:var(--text-muted); transition:color 0.2s;
+  -webkit-tap-highlight-color:transparent; background:none; border:none;
+}
+.nav-tab.active { color:var(--accent); }
+.nav-tab svg { width:20px; height:20px; }
+.nav-tab span { font-size:0.6rem; font-weight:600; letter-spacing:0.04em; }
+.nav-tab-dot {
+  width:4px; height:4px; border-radius:50%;
+  background:var(--accent); margin-top:-2px;
+  display:none;
+}
+.nav-tab.active .nav-tab-dot { display:block; }
+
+/* ── SIGNOUT hidden link (functional only) ── */
+.hidden-signout { display:none; }
+
+@media(max-width:480px) {
+  .body-scroll { padding:20px 14px max(80px, calc(env(safe-area-inset-bottom,0px) + 80px)); gap:16px; }
+  .profile-card { padding:18px 16px; }
+  .welcome-banner { padding:22px 18px; }
+  .cards-grid { gap:10px; }
+  .tile { padding:16px 13px; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="grain"></div>
+
+<div class="page">
+
+  <!-- ── TOP NAV ── -->
+  <nav class="top-nav">
+    <div class="nav-logo">Home</div>
+    <div class="nav-right">
+      <!-- notification bell -->
+      <div class="nav-icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+      </div>
+      <!-- sign out -->
+      <div class="nav-icon-btn" onclick="signOut()" title="Sign out">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── SCROLLABLE BODY ── -->
+  <div class="body-scroll">
+
+    <!-- Profile card -->
+    <div class="profile-card">
+      <div class="profile-avatar" id="profile-avatar">?</div>
+      <div class="profile-info">
+        <div class="profile-name" id="profile-name">Loading...</div>
+        <div class="profile-status">
+          <div class="dot"></div>
+          <span id="profile-status-text">Active now</span>
+        </div>
+      </div>
+      <div class="profile-time" id="profile-time">—</div>
+    </div>
+
+    <!-- Welcome section -->
+    <div class="welcome-section">
+      <div class="welcome-label" id="welcome-label">Welcome back</div>
+      <div class="welcome-heading">
+        <span id="greet-line"></span>
+        <span class="hl" id="greet-name">friend.</span>
+      </div>
+      <p class="welcome-msg" id="welcome-msg">You're all signed in. Pick up right where you left off.</p>
+    </div>
+
+    <!-- Quick tiles -->
+    <div class="section-label">Quick Access</div>
+    <div class="cards-grid">
+      <div class="tile" onclick="tileClick('Profile')">
+        <div class="tile-icon ti-teal">👤</div>
+        <div class="tile-title">Profile</div>
+        <div class="tile-desc">View and edit your details</div>
+      </div>
+      <div class="tile" onclick="tileClick('Settings')">
+        <div class="tile-icon ti-purple">⚙️</div>
+        <div class="tile-title">Settings</div>
+        <div class="tile-desc">Manage your preferences</div>
+      </div>
+      <div class="tile" onclick="tileClick('Activity')">
+        <div class="tile-icon ti-pink">📊</div>
+        <div class="tile-title">Activity</div>
+        <div class="tile-desc">See your recent history</div>
+      </div>
+      <div class="tile" onclick="tileClick('Explore')">
+        <div class="tile-icon ti-blue">🔍</div>
+        <div class="tile-title">Explore</div>
+        <div class="tile-desc">Discover what's new</div>
+      </div>
+    </div>
+
+    <!-- Wide cards -->
+    <div class="section-label">More</div>
+
+    <div class="wide-card" onclick="tileClick('Notifications')">
+      <div class="wide-icon ti-teal">🔔</div>
+      <div class="wide-text">
+        <div class="wide-title">Notifications</div>
+        <div class="wide-desc">You have no new notifications</div>
+      </div>
+      <div class="wide-arrow">›</div>
+    </div>
+
+    <div class="wide-card" onclick="tileClick('Help')">
+      <div class="wide-icon ti-purple">💬</div>
+      <div class="wide-text">
+        <div class="wide-title">Help &amp; Support</div>
+        <div class="wide-desc">Get help anytime</div>
+      </div>
+      <div class="wide-arrow">›</div>
+    </div>
+
+    <div class="wide-card" onclick="signOut()">
+      <div class="wide-icon ti-pink">🚪</div>
+      <div class="wide-text">
+        <div class="wide-title">Sign Out</div>
+        <div class="wide-desc">See you next time</div>
+      </div>
+      <div class="wide-arrow">›</div>
+    </div>
+
+  </div>
+
+  <!-- ── BOTTOM NAV ── -->
+  <nav class="bottom-nav">
+    <button class="nav-tab active" onclick="setTab(this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+      <div class="nav-tab-dot"></div>
+    </button>
+    <button class="nav-tab" onclick="setTab(this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span>Search</span>
+      <div class="nav-tab-dot"></div>
+    </button>
+    <button class="nav-tab" onclick="setTab(this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <span>Browse</span>
+      <div class="nav-tab-dot"></div>
+    </button>
+    <button class="nav-tab" onclick="setTab(this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Profile</span>
+      <div class="nav-tab-dot"></div>
+    </button>
+  </nav>
+
+  <!-- hidden sign out anchor -->
+  <a class="hidden-signout" id="signout-anchor" href="index.html">signout</a>
+
+</div>
+
+<script>
+  /* ── Guard ── */
+  const userName = sessionStorage.getItem('user_name');
+  const isNew    = sessionStorage.getItem('user_new') === '1';
+  if (!userName) {
+    window.location.href = 'index.html';
+  }
+
+  /* ── Populate ── */
+  const firstName = userName ? userName.split(' ')[0] : 'there';
+  const initials  = userName ? userName.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase() : '?';
+  const hour      = new Date().getHours();
+  const timeGreet = hour < 12 ? 'Good morning,' : hour < 18 ? 'Good afternoon,' : 'Good evening,';
+
+  document.getElementById('profile-avatar').textContent  = initials;
+  document.getElementById('profile-name').textContent    = userName || 'User';
+  document.getElementById('greet-name').textContent      = firstName + (isNew ? '!' : '.');
+  document.title = `Hi, ${firstName}!`;
+
+  if (isNew) {
+    document.getElementById('welcome-label').textContent  = '🎉 Account Created';
+    document.getElementById('greet-line').textContent     = 'Welcome aboard,';
+    document.getElementById('welcome-msg').textContent    = "Your account is all set up. Start exploring everything available to you.";
+    document.getElementById('profile-status-text').textContent = 'New member';
+  } else {
+    document.getElementById('greet-line').textContent = timeGreet;
+  }
+
+  /* ── Clock ── */
+  function updateClock() {
+    const now  = new Date();
+    const h    = now.getHours() % 12 || 12;
+    const m    = String(now.getMinutes()).padStart(2,'0');
+    const ampm = now.getHours() >= 12 ? 'PM' : 'AM';
+    const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    document.getElementById('profile-time').innerHTML =
+      `${h}:${m} ${ampm}<br><span style="color:var(--text-muted);font-size:0.65rem">${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}</span>`;
+  }
+  updateClock();
+  setInterval(updateClock, 10000);
+
+  /* ── Bottom nav tab switch ── */
+  function setTab(el) {
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  /* ── Tile click (demo) ── */
+  function tileClick(name) {
+    alert(`"${name}" — connect your content here!`);
+  }
+
+  /* ── Sign out ── */
+  function signOut() {
+    sessionStorage.removeItem('user_name');
+    sessionStorage.removeItem('user_new');
+    document.getElementById('signout-anchor').click();
+  }
+</script>
+</body>
+</html>
